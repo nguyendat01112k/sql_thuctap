@@ -85,6 +85,7 @@ INSERT INTO HuongDan (masv, madt, magv, ketqua) VALUES
 (8,'Dt03',15,6);
 
 -- Sử dụng lệnh truy vấn SQL lấy ra mã số và tên các đề tài có nhiều hơn 2 sinh viên tham gia thực tập .
+-- cách 1
 SELECT madt, tendt
 FROM DeTai
 WHERE madt IN (
@@ -93,19 +94,24 @@ WHERE madt IN (
     GROUP BY madt
     HAVING COUNT(DISTINCT masv) > 2
 );
-
+-- cách 2
 Select h.madt, count (h.madt) as "so sv"
 from huongdan h join sinhvien s
 on h.masv = s.masv
 group by h.madt
 HAVING COUNT(h.madt) >= 2;
+
+
 -- Sử dụng câu lệnh truy vấn SQL lấy ra mã số, tên đề tài của đề tài có kinh phí cao nhất .
+-- cách 1
 SELECT madt, tendt
 FROM DeTai
 WHERE kinhphi = (
     SELECT MAX(kinhphi)
     FROM DeTai
 );
+
+-- cách 2
 SELECT madt, tendt, kinhphi
 FROM DeTai
 ORDER BY kinhphi DESC
@@ -114,6 +120,8 @@ LIMIT 1;
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 SET sql_mode = 'IGNORE_SPACE';
 SET sql_mode = 'ANSI';
+
+
 -- Sử dụng câu lệnh SQL xuất ra Tên khoa, Số lượng sinh viên của mỗi khoa .
 select s.makhoa, k.tenkhoa ,count (s.makhoa) as "so luong sinh vien"
 from khoa k join sinhvien s
